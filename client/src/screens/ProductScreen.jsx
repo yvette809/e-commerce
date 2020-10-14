@@ -22,7 +22,7 @@ const ProductScreen = ({
   match,
   history
 }) => {
-  const [qty, setQty] = useState(0);
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
     listProductDetails(match.params.id);
@@ -45,7 +45,7 @@ const ProductScreen = ({
         <Row>
           <Col md={6}>
             <Image
-              src={product.image && product.image}
+              src={ product.image}
               alt={product.name}
               fluid
             />
@@ -53,7 +53,7 @@ const ProductScreen = ({
           <Col md={3}>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h3>product.name</h3>
+                <h3>{product.name}</h3>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Rating
