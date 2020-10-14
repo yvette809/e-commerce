@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-// import products from "../products"
+import React, { useEffect } from "react";
+
 import { Row, Col } from "react-bootstrap";
+import {connect} from "react-redux"
 import Product from "../components/Product";
+import {listProducts} from "../actions/productActions";
 
-const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
+const HomeScreen = ({ listProducts, productList: { products } }) => {
 
+  console.log("my products are", products)
   useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await axios.get("http://localhost:4060/api/products");
-      // console.log('response is',res.data)
-
-      setProducts(res.data);
-    };
-    fetchProducts();
+    listProducts();
   }, []);
 
   console.log("my products", products);
@@ -32,4 +27,8 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+const mapStateToProps = (state) => ({
+  productList: state.productList
+});
+
+export default connect(mapStateToProps,{listProducts})(HomeScreen);
