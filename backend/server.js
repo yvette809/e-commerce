@@ -3,21 +3,27 @@ const server = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const products = require("./src/data/products");
+// const products = require("./src/data/products");
+const productRouter = require("./src/routes/products/product");
+
+const {
+  badRequestHandler,
+  notFoundHandler,
+  genericErrorHandler,
+} = require("./src/middleware/errorMiddleware");
 
 dotenv.config();
 server.use(cors());
 server.use(express.json());
 
-server.get("/api/products", (req, res) => {
-  res.json(products);
-});
+server.use(notFoundHandler);
+server.use(badRequestHandler);
+server.use(genericErrorHandler)
 
-server.get("/api/products/:id", (req, res) => {
-  const product = products.find((p) => p._id === req.params.id);
-  res.json(product);
-});
+//routes
+server.use("/api/products", productRouter);
 
+// connect database
 const port = process.env.PORT || 4070;
 mongoose
   .connect(process.env.MONGO_URI, {
