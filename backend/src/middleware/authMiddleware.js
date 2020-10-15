@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../routes/users/userModel");
 
-const protect = async (req, res, next) => {
+const auth = async (req, res, next) => {
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -26,4 +26,4 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports= protect
+module.exports= {auth}
