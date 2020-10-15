@@ -1,7 +1,7 @@
 const express = require("express");
 const UserModel = require("./userModel");
 const bcrypt = require("bcryptjs");
-const protect = require("../../middleware/authMiddleware");
+const {auth} = require("../../middleware/authMiddleware");
 const generateToken = require("../../../utils/generateToken");
 const userRouter = express.Router();
 
@@ -27,7 +27,7 @@ userRouter.post("/login", async (req, res, next) => {
 
 // get user profile(logged in user)
 
-userRouter.get("/profile", protect, async (req, res, next) => {
+userRouter.get("/profile", auth, async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.user.id).select("-password");
     if (user) {
@@ -71,6 +71,52 @@ userRouter.post("/register", async (req, res, next) => {
       throw new Error("Invalid user data");
     }
   } catch (error) {}
+});
+
+// update user
+// sol 1
+userRouter.put("/profile/:id", auth, async(req,res,next)=>{
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.user._id)
+    if(user){
+      user.name = req.body.name || user.name
+      user.email = req.body.email ||user.email
+      if(req.body.password){
+        user.password = req.body.password
+      }
+      const updatedUser = await user.save()
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser._id),
+
+      })
+    }else{
+      res.status(404).send('user not found')
+    }
+    
+  } catch (error) {
+    next(error)
+    
+  }
+})
+
+//sol2
+userRouter.put('/profile/:id', auth, async (req, res, next) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.user.id, req.body);
+    if (user) {
+      res.send(user);
+    } else {
+      const error = new Error(`user with id ${req.user.id} not found`);
+      error.httpStatusCode = 404;
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = userRouter;
