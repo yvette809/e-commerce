@@ -5,6 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 // const products = require("./src/data/products");
 const productRouter = require("./src/routes/products/product");
+const userRouter = require("./src/routes/users/user");
 
 const {
   badRequestHandler,
@@ -22,6 +23,7 @@ server.use(genericErrorHandler)
 
 //routes
 server.use("/api/products", productRouter);
+server.use("/api/users", userRouter);
 
 // connect database
 const port = process.env.PORT || 4070;

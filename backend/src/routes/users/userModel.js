@@ -31,7 +31,9 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password)
 }
 
+// we encrypt password before save
 userSchema.pre('save', async function (next) {
+  // we only want to hash the password if the user is modidie
   if (!this.isModified('password')) {
     next()
   }
