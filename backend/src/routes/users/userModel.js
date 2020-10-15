@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = mongoose.Schema(
   {
@@ -25,23 +25,23 @@ const userSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-)
+);
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password)
-}
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 // we encrypt password before save
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
   // we only want to hash the password if the user is modidie
-  if (!this.isModified('password')) {
-    next()
+  if (!this.isModified("password")) {
+    next();
   }
 
-  const salt = await bcrypt.genSalt(10)
-  this.password = await bcrypt.hash(this.password, salt)
-})
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
-const UserModel = mongoose.model('User', userSchema)
+const UserModel = mongoose.model("User", userSchema);
 
-module.exports= UserModel
+module.exports = UserModel;
