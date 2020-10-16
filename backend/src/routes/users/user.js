@@ -1,7 +1,7 @@
 const express = require("express");
 const UserModel = require("./userModel");
 const bcrypt = require("bcryptjs");
-const {auth} = require("../../middleware/authMiddleware");
+const { auth, admin } = require("../../middleware/authMiddleware");
 const generateToken = require("../../../utils/generateToken");
 const userRouter = express.Router();
 
@@ -27,7 +27,7 @@ userRouter.post("/login", async (req, res, next) => {
 
 // get user profile(logged in user)
 
-userRouter.get("/profile", auth, async (req, res, next) => {
+userRouter.get("/:id", auth, async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.user.id).select("-password");
     if (user) {
@@ -49,7 +49,7 @@ userRouter.post("/register", async (req, res, next) => {
     const userExists = await UserModel.findOne({ email });
 
     if (userExists) {
-        res.status(400).json({ msg: "user already exists" });
+      res.status(400).json({ msg: "user already exists" });
     }
 
     const user = await UserModel.create({
@@ -73,10 +73,10 @@ userRouter.post("/register", async (req, res, next) => {
   } catch (error) {}
 });
 
-// get user by id
+// get user profile
 
-userRouter.get("/:id",auth, async(req,res,next)=>{
-  const user = await User.findById(req.user._id)
+userRouter.get("/profile", auth, async (req, res, next) => {
+  const user = await User.findById(req.user._id);
 
   if (user) {
     res.json({
@@ -84,44 +84,58 @@ userRouter.get("/:id",auth, async(req,res,next)=>{
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-    })
+    });
   } else {
-    res.status(404)
-    throw new Error('User not found')
+    res.status(404);
+    throw new Error("User not found");
   }
-})
+});
+
+//get user by id
+userRouter.get("/:id", auth, async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 // update user rpofile
 // sol 1
-userRouter.put("/profile", auth, async(req,res,next)=>{
+userRouter.put("/profile", auth, async (req, res, next) => {
   try {
-    const user = await UserModel.findByIdAndUpdate(req.user._id)
-    if(user){
-      user.name = req.body.name || user.name
-      user.email = req.body.email ||user.email
-      if(req.body.password){
-        user.password = req.body.password
+    const user = await UserModel.findByIdAndUpdate(req.user._id);
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = req.body.password;
       }
-      const updatedUser = await user.save()
+      const updatedUser = await user.save();
       res.json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
         token: generateToken(updatedUser._id),
-
-      })
-    }else{
-      res.status(404).send('user not found')
+      });
+    } else {
+      res.status(404).send("user not found");
     }
-    
   } catch (error) {
-    next(error)
-    
+    next(error);
   }
-})
+});
 
 //sol2
-userRouter.put('/profile', auth, async (req, res, next) => {
+userRouter.put("/profile", auth, async (req, res, next) => {
   try {
     const user = await UserModel.findByIdAndUpdate(req.user.id, req.body);
     if (user) {
@@ -130,6 +144,78 @@ userRouter.put('/profile', auth, async (req, res, next) => {
       const error = new Error(`user with id ${req.user.id} not found`);
       error.httpStatusCode = 404;
       next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get all users admin only
+userRouter.get("/", auth, admin, async (req, res, next) => {
+  try {
+    const users = await UserModel.find();
+    if (users) {
+      res.send(users);
+    } else {
+      const error = new Error(`users not found`);
+      error.httpStatusCode = 404;
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// delete user
+userRouter.delete("/:id", auth, admin, async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(req.params.id);
+    if (user) {
+      await user.remove();
+      res.send("user deleted");
+    } else {
+      const error = new Error(`user with id ${req.params.id} not found`);
+      error.httpStatusCode = 404;
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// get user by id
+userRouter.get("/:id", auth, admin, async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(req.params.id).select("-password");
+    if (user) {
+      res.send(user);
+    } else {
+      const error = new Error(`user with id ${req.params.id} not found`);
+      error.httpStatusCode = 404;
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// update user by id
+userRouter.put("/:id", auth, admin, async (req, res, next) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.params.id);
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.isAdmin = req.body.isAdmin;
+      const updatedUser = await user.save();
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      });
+    } else {
+      res.status(404).send("user not found");
     }
   } catch (error) {
     next(error);

@@ -7,7 +7,7 @@ const orderRouter = express.Router();
 
 // create new order
 
-orderRouter.post("/", auth, async (req, res, next) => {
+orderRouter.post("/", auth, async (req, res) => {
   const {
     orderItems,
     shippingAddress,
@@ -17,6 +17,7 @@ orderRouter.post("/", auth, async (req, res, next) => {
     shippingPrice,
     totalPrice,
   } = req.body;
+  
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
@@ -42,20 +43,16 @@ orderRouter.post("/", auth, async (req, res, next) => {
 
 //get order by id
 orderRouter.get("/:id", auth, async (req, res, next) => {
-  try {
-    const order = await (await OrderModel.findById(req.params.id)).populate(
-      "user",
-      "name email"
-    );
-    if (order) {
-      res.json(order);
-    } else {
-      const error = new Error(`order with id ${req.params.id} not found`);
-      error.httpStatusCode = 404;
-      next(error);
-    }
-  } catch (error) {
-    next(error);
+  const order = await OrderModel.findById(req.params.id).populate(
+    'user',
+    'name email'
+  )
+
+  if (order) {
+    res.json(order)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
   }
 });
 
@@ -84,5 +81,24 @@ orderRouter.put("/:id/pay", auth, async (req, res, next) => {
     next(error);
   }
 });
+
+// get loggen in user order
+
+orderRouter.get("/myorders", auth, async(req,res,next)=>{
+  try {
+    const orders = await OrderModel.find({user:req.user._id})
+   if(orders){
+     res.status(200).json(orders)
+   }else{
+    const error = new Error("Orders not found");
+    error.httpStatusCode = 404;
+    next(error);
+   }
+    
+  } catch (error) {
+    next(error)
+    
+  }
+})
 
 module.exports = orderRouter;

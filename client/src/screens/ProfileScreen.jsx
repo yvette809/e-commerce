@@ -5,13 +5,14 @@ import { connect } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails,updateUserProfile } from "../actions/userActions";
-// import { listMyOrders } from '../actions/orderActions'
+import { listMyOrders } from '../actions/orderActions'
 
 const ProfileScreen = ({
   location,
   history,
   getUserDetails,
   updateUserProfile,
+  listMyOrders,
   userDetails,
   userLogin,
   userUpdateProfile,
@@ -34,7 +35,7 @@ const ProfileScreen = ({
     } else {
       if (!user || !user.name) {
         getUserDetails("profile");
-        // listMyOrders();
+        listMyOrders();
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -172,4 +173,4 @@ const mapStateToProps = (state) => ({
   orderListMy: state.orderListMy,
 });
 
-export default connect(mapStateToProps, { getUserDetails,updateUserProfile })(ProfileScreen);
+export default connect(mapStateToProps, { getUserDetails,updateUserProfile,listMyOrders })(ProfileScreen);

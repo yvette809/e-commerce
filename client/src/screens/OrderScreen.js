@@ -34,6 +34,7 @@ const OrderScreen = ({
   const dispatch = useDispatch();
 
   const { order, loading, error } = orderDetails;
+  console.log("the order is", order)
   const { loading: loadingPay, success: successPay } = orderPay;
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
   const { userInfo } = userLogin;
@@ -77,7 +78,7 @@ const OrderScreen = ({
         setSdkReady(true);
       }
     }
-  }, [dispatch, orderId, successPay, successDeliver, order]);
+  }, [dispatch, orderId, successPay, successDeliver, order,getOrderDetails,history,userInfo]);
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);

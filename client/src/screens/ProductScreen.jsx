@@ -18,15 +18,15 @@ import Rating from "../components/Rating";
 
 const ProductScreen = ({
   listProductDetails,
-  productList: { product, loading, error },
+  productList,
   match,
   history
 }) => {
   const [qty, setQty] = useState(1);
-
+  const{product,loading,error} =productList
   useEffect(() => {
     listProductDetails(match.params.id);
-  }, []);
+  }, [listProductDetails,match.params.id]);
 
   const addToCartHandler = ()=>{
     history.push(`/cart/${match.params.id}?qty=${qty}`)
