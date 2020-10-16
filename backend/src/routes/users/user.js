@@ -73,9 +73,26 @@ userRouter.post("/register", async (req, res, next) => {
   } catch (error) {}
 });
 
-// update user
+// get user by id
+
+userRouter.get("/:id",auth, async(req,res,next)=>{
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+// update user rpofile
 // sol 1
-userRouter.put("/profile/:id", auth, async(req,res,next)=>{
+userRouter.put("/profile", auth, async(req,res,next)=>{
   try {
     const user = await UserModel.findByIdAndUpdate(req.user._id)
     if(user){
@@ -104,7 +121,7 @@ userRouter.put("/profile/:id", auth, async(req,res,next)=>{
 })
 
 //sol2
-userRouter.put('/profile/:id', auth, async (req, res, next) => {
+userRouter.put('/profile', auth, async (req, res, next) => {
   try {
     const user = await UserModel.findByIdAndUpdate(req.user.id, req.body);
     if (user) {
