@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 // const products = require("./src/data/products");
 const productRouter = require("./src/routes/products/product");
 const userRouter = require("./src/routes/users/user");
-
+const orderRouter = require("./src/routes/order/order");
 const {
   badRequestHandler,
   notFoundHandler,
@@ -24,6 +24,7 @@ server.use(genericErrorHandler)
 //routes
 server.use("/api/products", productRouter);
 server.use("/api/users", userRouter);
+server.use("/api/orders", orderRouter);
 
 // connect database
 const port = process.env.PORT || 4070;
