@@ -81,11 +81,11 @@ const OrderScreen = ({
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult);
-    dispatch(payOrder(orderId, paymentResult));
+    payOrder(orderId, paymentResult);
   };
 
   const deliverHandler = () => {
-    dispatch(deliverOrder(order));
+    deliverOrder(order);
   };
 
   return loading ? (

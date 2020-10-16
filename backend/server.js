@@ -19,12 +19,16 @@ server.use(express.json());
 
 server.use(notFoundHandler);
 server.use(badRequestHandler);
-server.use(genericErrorHandler)
+server.use(genericErrorHandler);
 
 //routes
 server.use("/api/products", productRouter);
 server.use("/api/users", userRouter);
 server.use("/api/orders", orderRouter);
+
+server.get("/api/config/paypal", (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+);
 
 // connect database
 const port = process.env.PORT || 4070;

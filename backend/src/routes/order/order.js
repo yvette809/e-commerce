@@ -59,4 +59,30 @@ orderRouter.get("/:id", auth, async (req, res, next) => {
   }
 });
 
+// update order to pay
+orderRouter.put("/:id/pay", auth, async (req, res, next) => {
+  try {
+    const order = await OrderModel.findById(req.params.id);
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.payer.email_address,
+      };
+
+      const updatedOrder = await order.save()
+      res.json(updatedOrder)
+    } else {
+      const error = new Error("Order not found");
+      error.httpStatusCode = 404;
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = orderRouter;
