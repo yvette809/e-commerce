@@ -1,63 +1,69 @@
-import axios from 'axios'
+import axios from "axios";
 import {
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
-//   ORDER_DETAILS_FAIL,
-//   ORDER_DETAILS_SUCCESS,
-//   ORDER_DETAILS_REQUEST,
-//   ORDER_PAY_FAIL,
-//   ORDER_PAY_SUCCESS,
-//   ORDER_PAY_REQUEST,
-//   ORDER_LIST_MY_REQUEST,
-//   ORDER_LIST_MY_SUCCESS,
-//   ORDER_LIST_MY_FAIL,
-//   ORDER_LIST_FAIL,
-//   ORDER_LIST_SUCCESS,
-//   ORDER_LIST_REQUEST,
-//   ORDER_DELIVER_FAIL,
-//   ORDER_DELIVER_SUCCESS,
-//   ORDER_DELIVER_REQUEST,
-} from '../constants/orderConstants'
-import { logout } from './userActions'
+    ORDER_DETAILS_FAIL,
+    ORDER_DETAILS_SUCCESS,
+    ORDER_DETAILS_REQUEST,
+  //   ORDER_PAY_FAIL,
+  //   ORDER_PAY_SUCCESS,
+  //   ORDER_PAY_REQUEST,
+  //   ORDER_LIST_MY_REQUEST,
+  //   ORDER_LIST_MY_SUCCESS,
+  //   ORDER_LIST_MY_FAIL,
+  //   ORDER_LIST_FAIL,
+  //   ORDER_LIST_SUCCESS,
+  //   ORDER_LIST_REQUEST,
+  //   ORDER_DELIVER_FAIL,
+  //   ORDER_DELIVER_SUCCESS,
+  //   ORDER_DELIVER_REQUEST,
+} from "../constants/orderConstants";
+import { logout } from "./userActions";
 
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
     dispatch({
       type: ORDER_CREATE_REQUEST,
-    })
+    });
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.post(`http://localhost:4060/api/orders`, order, config)
+    const { data } = await axios.post(
+      `http://localhost:4060/api/orders`,
+      order,
+      config
+    );
 
     dispatch({
       type: ORDER_CREATE_SUCCESS,
       payload: data,
-    })
+    });
   } catch (error) {
     const message =
       error.response && error.response.data.message
         ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: ORDER_CREATE_FAIL,
       payload: message,
-    })
+    });
   }
-}
+};
+
+// //get order by id
 
 export const getOrderDetails = (id) => async (dispatch, getState) => {
   try {
@@ -75,7 +81,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`/api/orders/${id}`, config)
+    const { data } = await axios.get(`http://localhost:4060/api/orders/${id}`, config)
 
     dispatch({
       type: ORDER_DETAILS_SUCCESS,
@@ -96,162 +102,168 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
   }
 }
 
-export const payOrder = (orderId, paymentResult) => async (
-  dispatch,
-  getState
-) => {
-  try {
-    dispatch({
-      type: ORDER_PAY_REQUEST,
-    })
+// // payorder
+// export const payOrder = (orderId, paymentResult) => async (
+//   dispatch,
+//   getState
+// ) => {
+//   try {
+//     dispatch({
+//       type: ORDER_PAY_REQUEST,
+//     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+//     const {
+//       userLogin: { userInfo },
+//     } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
 
-    const { data } = await axios.put(
-      `/api/orders/${orderId}/pay`,
-      paymentResult,
-      config
-    )
+//     const { data } = await axios.put(
+//       `/api/orders/${orderId}/pay`,
+//       paymentResult,
+//       config
+//     )
 
-    dispatch({
-      type: ORDER_PAY_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: ORDER_PAY_FAIL,
-      payload: message,
-    })
-  }
-}
+//     dispatch({
+//       type: ORDER_PAY_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     const message =
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     if (message === 'Not authorized, token failed') {
+//       dispatch(logout())
+//     }
+//     dispatch({
+//       type: ORDER_PAY_FAIL,
+//       payload: message,
+//     })
+//   }
+// }
 
-export const deliverOrder = (order) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: ORDER_DELIVER_REQUEST,
-    })
+// //deliver order
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+// export const deliverOrder = (order) => async (dispatch, getState) => {
+//   try {
+//     dispatch({
+//       type: ORDER_DELIVER_REQUEST,
+//     })
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+//     const {
+//       userLogin: { userInfo },
+//     } = getState()
 
-    const { data } = await axios.put(
-      `/api/orders/${order._id}/deliver`,
-      {},
-      config
-    )
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
 
-    dispatch({
-      type: ORDER_DELIVER_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: ORDER_DELIVER_FAIL,
-      payload: message,
-    })
-  }
-}
+//     const { data } = await axios.put(
+//       `/api/orders/${order._id}/deliver`,
+//       {},
+//       config
+//     )
 
-export const listMyOrders = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: ORDER_LIST_MY_REQUEST,
-    })
+//     dispatch({
+//       type: ORDER_DELIVER_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     const message =
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     if (message === 'Not authorized, token failed') {
+//       dispatch(logout())
+//     }
+//     dispatch({
+//       type: ORDER_DELIVER_FAIL,
+//       payload: message,
+//     })
+//   }
+// }
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+// //list myorders
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+// export const listMyOrders = () => async (dispatch, getState) => {
+//   try {
+//     dispatch({
+//       type: ORDER_LIST_MY_REQUEST,
+//     })
 
-    const { data } = await axios.get(`/api/orders/myorders`, config)
+//     const {
+//       userLogin: { userInfo },
+//     } = getState()
 
-    dispatch({
-      type: ORDER_LIST_MY_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: ORDER_LIST_MY_FAIL,
-      payload: message,
-    })
-  }
-}
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
 
-export const listOrders = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: ORDER_LIST_REQUEST,
-    })
+//     const { data } = await axios.get(`/api/orders/myorders`, config)
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+//     dispatch({
+//       type: ORDER_LIST_MY_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     const message =
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     if (message === 'Not authorized, token failed') {
+//       dispatch(logout())
+//     }
+//     dispatch({
+//       type: ORDER_LIST_MY_FAIL,
+//       payload: message,
+//     })
+//   }
+// }
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+// //list orders
+// export const listOrders = () => async (dispatch, getState) => {
+//   try {
+//     dispatch({
+//       type: ORDER_LIST_REQUEST,
+//     })
 
-    const { data } = await axios.get(`/api/orders`, config)
+//     const {
+//       userLogin: { userInfo },
+//     } = getState()
 
-    dispatch({
-      type: ORDER_LIST_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
-    }
-    dispatch({
-      type: ORDER_LIST_FAIL,
-      payload: message,
-    })
-  }
-}
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
+
+//     const { data } = await axios.get(`/api/orders`, config)
+
+//     dispatch({
+//       type: ORDER_LIST_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     const message =
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     if (message === 'Not authorized, token failed') {
+//       dispatch(logout())
+//     }
+//     dispatch({
+//       type: ORDER_LIST_FAIL,
+//       payload: message,
+//     })
+//   }
+// }
