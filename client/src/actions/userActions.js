@@ -18,7 +18,11 @@ import {
   USER_LIST_FAIL,
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
-  USER_DELETE_FAIL
+  USER_DELETE_FAIL,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL,
+  USER_UPDATE_RESET
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -257,39 +261,41 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   }
 }
 
-// export const updateUser = (user) => async (dispatch, getState) => {
-//   try {
-//     dispatch({
-//       type: USER_UPDATE_REQUEST,
-//     })
+//update user
 
-//     const {
-//       userLogin: { userInfo },
-//     } = getState()
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_REQUEST,
+    })
 
-//     const config = {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     }
+    const {
+      userLogin: { userInfo },
+    } = getState()
 
-//     const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
 
-//     dispatch({ type: USER_UPDATE_SUCCESS })
+    const { data } = await axios.put(`http://localhost:4060/api/users/${user._id}`, user, config)
 
-//     dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
-//   } catch (error) {
-//     const message =
-//       error.response && error.response.data.message
-//         ? error.response.data.message
-//         : error.message
-//     if (message === 'Not authorized, token failed') {
-//       dispatch(logout())
-//     }
-//     dispatch({
-//       type: USER_UPDATE_FAIL,
-//       payload: message,
-//     })
-//   }
-// }
+    dispatch({ type: USER_UPDATE_SUCCESS })
+
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: USER_UPDATE_FAIL,
+      payload: message,
+    })
+  }
+}
