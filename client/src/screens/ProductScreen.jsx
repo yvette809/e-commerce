@@ -18,12 +18,12 @@ import Rating from "../components/Rating";
 
 const ProductScreen = ({
   listProductDetails,
-  productList,
+  productDetails,
   match,
   history
 }) => {
   const [qty, setQty] = useState(1);
-  const{product,loading,error} =productList
+  const{product,loading,error} =productDetails
   useEffect(() => {
     listProductDetails(match.params.id);
   }, [listProductDetails,match.params.id]);
@@ -129,7 +129,7 @@ const ProductScreen = ({
 };
 
 const mapStateToProps = (state) => ({
-  productList: state.productList,
+  productDetails: state.productDetails,
 });
 
 export default connect(mapStateToProps, { listProductDetails })(ProductScreen);
