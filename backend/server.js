@@ -2,11 +2,13 @@ const express = require("express");
 const server = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 const dotenv = require("dotenv");
 // const products = require("./src/data/products");
 const productRouter = require("./src/routes/products/product");
 const userRouter = require("./src/routes/users/user");
 const orderRouter = require("./src/routes/order/order");
+const uploadRouter = require("./src/routes/uploadRoutes");
 const {
   badRequestHandler,
   notFoundHandler,
@@ -25,10 +27,13 @@ server.use(genericErrorHandler);
 server.use("/api/products", productRouter);
 server.use("/api/users", userRouter);
 server.use("/api/orders", orderRouter);
+server.use("/api/upload", uploadRouter);
 
 server.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
+
+server.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // connect database
 const port = process.env.PORT || 4070;
