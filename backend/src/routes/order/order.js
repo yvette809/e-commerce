@@ -1,7 +1,7 @@
 const express = require("express");
 const OrderModel = require("./orderModel");
 const bcrypt = require("bcryptjs");
-const { auth } = require("../../middleware/authMiddleware");
+const { auth,admin } = require("../../middleware/authMiddleware");
 const generateToken = require("../../../utils/generateToken");
 const orderRouter = express.Router();
 
@@ -100,5 +100,21 @@ orderRouter.get("/myorders", auth, async(req,res,next)=>{
     
   }
 })
+
+// get all orders
+
+orderRouter.get("/", auth,admin,async (req, res, next) => {
+  try {
+    const orders = await OrderModel.find().populate('user', 'id name');
+    if (orders) {
+      res.status(200).send(orders);
+    } else {
+      res.status(404).json({ message: "orders not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = orderRouter;

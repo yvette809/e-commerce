@@ -52,7 +52,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 // import ProductCarousel from '../components/ProductCarousel'
-// import Meta from '../components/Meta'
+import Meta from '../components/Meta'
 import { listProducts } from '../actions/productActions'
 
 const HomeScreen = ({ match }) => {
@@ -71,9 +71,10 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
-      {/* <Meta /> */}
+      <Meta />
       {!keyword ? (
-        <div>Hello</div>
+        <h1>hello</h1>
+        //  <ProductCarousel />
       ) : (
         <Link to='/' className='btn btn-light'>
           Go Back

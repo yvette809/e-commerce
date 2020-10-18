@@ -137,4 +137,4 @@ const ProductListScreen = ({ history, match }) => {
   )
 }
 
-export default ProductListScreen
+export default ProductListScreen;
