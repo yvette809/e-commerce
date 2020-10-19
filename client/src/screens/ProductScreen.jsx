@@ -19,6 +19,7 @@ import {
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants";
+import Meta from "../components/Meta"
 
 const ProductScreen = ({
   listProductDetails,
@@ -72,6 +73,7 @@ const ProductScreen = ({
         // ) : error ? (
         //   <Message variant="danger"/>
         <>
+        <Meta title={product.name}/>
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

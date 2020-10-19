@@ -240,6 +240,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       dispatch({ type: PRODUCT_TOP_REQUEST })
   
       const { data } = await axios.get(`http://localhost:4060/api/products/top`)
+
   
       dispatch({
         type: PRODUCT_TOP_SUCCESS,
