@@ -3,6 +3,7 @@ const server = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const morgan = require("morgan");
 const dotenv = require("dotenv");
 // const products = require("./src/data/products");
 const productRouter = require("./src/routes/products/product");
@@ -14,6 +15,11 @@ const {
   notFoundHandler,
   genericErrorHandler,
 } = require("./src/middleware/errorMiddleware");
+
+
+if(process.env.NODE_ENV === 'development'){
+  server.use(morgan('dev'))
+}
 
 dotenv.config();
 server.use(cors());

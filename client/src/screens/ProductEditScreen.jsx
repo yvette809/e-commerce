@@ -24,7 +24,8 @@ const ProductEditScreen = ({ match, history }) => {
   const dispatch = useDispatch()
 
   const productDetails = useSelector((state) => state.productDetails)
-  const { loading, error, product } = productDetails
+  const{product,loading,error} =productDetails
+  console.log("the productdetails", product)
 
   const productUpdate = useSelector((state) => state.productUpdate)
   const {
@@ -65,7 +66,7 @@ const ProductEditScreen = ({ match, history }) => {
         },
       }
 
-      const { data } = await axios.post('/api/upload', formData, config)
+      const { data } = await axios.post('http://localhost:4060/api/upload', formData, config)
 
       setImage(data)
       setUploading(false)
