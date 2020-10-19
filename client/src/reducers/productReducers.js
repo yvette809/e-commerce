@@ -67,7 +67,7 @@ import {
 //   }
 // };
 
-export const productListReducer = (state = { products: [], pages:[], page:{} }, action) => {
+export const productListReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
       return { loading: true, products: [] }

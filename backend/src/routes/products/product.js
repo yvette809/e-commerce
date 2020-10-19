@@ -93,7 +93,7 @@ productRouter.post("/", auth, admin, async (req, res) => {
 });
 
 // @desc    Update a product
-productRouter.put("/:id", auth,admin, async (req, res, next) => {
+productRouter.put("/:id", auth, admin, async (req, res, next) => {
   const {
     name,
     price,
@@ -129,19 +129,19 @@ productRouter.put("/:id", auth,admin, async (req, res, next) => {
 });
 
 // create new review
-productRouter.post("/:id/reviews", async(req,res,next)=>{
-  const { rating, comment } = req.body
+productRouter.post("/:id/reviews", auth, async (req, res, next) => {
+  const { rating, comment } = req.body;
 
-  const product = await Product.findById(req.params.id)
+  const product = await ProductModel.findById(req.params.id);
 
   if (product) {
     const alreadyReviewed = product.reviews.find(
       (r) => r.user.toString() === req.user._id.toString()
-    )
+    );
 
     if (alreadyReviewed) {
-      res.status(400)
-      throw new Error('Product already reviewed')
+      res.status(400);
+      throw new Error("Product already reviewed");
     }
 
     const review = {
@@ -149,22 +149,34 @@ productRouter.post("/:id/reviews", async(req,res,next)=>{
       rating: Number(rating),
       comment,
       user: req.user._id,
-    }
+    };
 
-    product.reviews.push(review)
+    product.reviews.push(review);
 
-    product.numReviews = product.reviews.length
+    product.numReviews = product.reviews.length;
 
     product.rating =
       product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-      product.reviews.length
+      product.reviews.length;
 
-    await product.save()
-    res.status(201).json({ message: 'Review added' })
+    await product.save();
+    res.status(201).json({ message: "Review added" });
   } else {
-    res.status(404)
-    throw new Error('Product not found')
+    res.status(404);
+    throw new Error("Product not found");
   }
-})
+});
+
+// get top rated products
+
+productRouter.get("/top", async (req, res) => {
+  const products = await ProductModel.find({}).sort({ rating: -1 }).limit(3);
+  if (products) {
+    res.json(products);
+  } else {
+    res.status(404);
+    throw new Error("s not found");
+  }
+});
 
 module.exports = productRouter;

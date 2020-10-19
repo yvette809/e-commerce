@@ -25,29 +25,7 @@ import {
 
 import { logout } from './userActions'
 
-// get all products
-// export const listProducts = ()=>async(dispatch)=>{
-//     try {
 
-//         dispatch({
-//             type:PRODUCT_LIST_REQUEST
-//         })
-
-//         const res = await axios.get("http://localhost:4060/api/products") 
-//         dispatch({
-//             type:PRODUCT_LIST_SUCCESS,
-//             payload:res.data
-//         })
-        
-//     } catch (error) {
-//         dispatch({
-//             type:PRODUCT_LIST_FAIL,
-//             payload:error.response && error.response.data.message? error.response.data.message:error.message
-//         })
-        
-//     }
-
-// }
 
 export const listProducts = (keyword = '', pageNumber = '') => async (
     dispatch
