@@ -28,6 +28,7 @@ const ProfileScreen = ({
   const { userInfo } = userLogin;
   const { success } = userUpdateProfile;
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
+  console.log("my orders", orders)
 
   useEffect(() => {
     if (!userInfo) {

@@ -107,7 +107,7 @@ userRouter.get("/:id", auth, async (req, res, next) => {
     throw new Error("User not found");
   }
 });
-// update user rpofile
+// update user pofile
 // sol 1
 userRouter.put("/profile", auth, async (req, res, next) => {
   try {

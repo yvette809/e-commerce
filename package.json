@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "This is a shop that sell electronic products",
-  "main": "index.js",
+  "main": "server.js",
   "engines": {
     "node": "12.16.0"
   },

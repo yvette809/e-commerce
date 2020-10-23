@@ -122,7 +122,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `"http://localhost:4060/api/users/${id}`,
+      `http://localhost:4060/api/users/${id}`,
       config
     );
 

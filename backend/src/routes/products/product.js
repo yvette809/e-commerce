@@ -2,7 +2,7 @@ const express = require("express");
 const ProductModel = require("./productModel");
 const productRouter = express.Router();
 const { auth, admin } = require("../../middleware/authMiddleware");
-const productModel = require("./productModel");
+
 
 // //get all products
 // productRouter.get("/", async (req, res, next) => {
@@ -175,7 +175,7 @@ productRouter.get("/top", async (req, res) => {
     res.json(products);
   } else {
     res.status(404);
-    throw new Error("s not found");
+    throw new Error("products not found");
   }
 });
 
