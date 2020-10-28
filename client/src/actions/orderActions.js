@@ -167,7 +167,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      `http://locahost:4060/api/orders/${order._id}/deliver`,
+      `http://localhost:4060/api/orders/${order._id}/deliver`,
       {},
       config
     )
@@ -209,7 +209,7 @@ export const listMyOrders = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`http://localhost:4060/api/orders/myorders`, config)
+    const { data } = await axios.get('http://localhost:4060/api/orders/myorders', config)
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,
