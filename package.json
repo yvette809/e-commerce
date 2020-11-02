@@ -4,14 +4,16 @@
   "description": "This is a shop that sell electronic products",
   "main": "server.js",
   "type": "module",
- 
+  "engines": {
+    "node": "12.16.0"
+  },
   "scripts": {
     "start": "node backend/server",
     "server": "nodemon backend/server",
     "client": "npm start --prefix client",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
-    "heroku-postbuild":  "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Yvette Tanila",
   "license": "ISC",
