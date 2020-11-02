@@ -4,9 +4,7 @@
   "description": "This is a shop that sell electronic products",
   "main": "server.js",
   "type": "module",
-  "engines": {
-    "node": "12.16.0"
-  },
+ 
   "scripts": {
     "start": "node backend/server",
     "server": "nodemon backend/server",
