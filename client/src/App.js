@@ -17,7 +17,7 @@ import OrderScreen from "./screens/OrderScreen";
 import UserListScreen from "./screens/UserListSCreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
-import ProductListScreen from "./screens/ProductListScreen";
+// import ProductListScreen from "./screens/ProductListScreen";
 import OrderListScreen from "./screens/OrderListScreen";
 
 function App() {
