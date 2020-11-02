@@ -8,7 +8,7 @@
     "node": "12.16.0"
   },
   "scripts": {
-    "start": "node backend/index.js",
+    "start": "node backend/server",
     "server": "nodemon backend/server",
     "client": "npm start --prefix client",
     "data:import": "node backend/seeder",
