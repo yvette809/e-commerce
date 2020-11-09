@@ -101,11 +101,13 @@ orderRouter.put("/:id/deliver", auth, async (req, res, next) => {
   }
 });
 
-// get loggen in user order
+
+// get logged in user order
 
 orderRouter.get("/myorders", auth, async (req, res, next) => {
   try {
     const orders = await OrderModel.find({ user: req.user._id });
+    console.log(orders)
     if (orders) {
       res.status(200).json(orders);
     } else {

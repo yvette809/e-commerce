@@ -54,8 +54,6 @@ if(process.env.NODE_ENV=== 'production'){
   })
 }
 
-
-
 // connect database
 const port = process.env.PORT || 4070;
 mongoose
