@@ -40,21 +40,6 @@ productRouter.get("/", async (req, res, next) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
-//get products by id
-productRouter.get("/:id", async (req, res, next) => {
-  try {
-    const product = await ProductModel.findById(req.params.id);
-    if (product) {
-      res.status(200).send(product);
-    } else {
-      res
-        .status(404)
-        .json({ message: `product with id ${req.params.id} not found` });
-    }
-  } catch (error) {
-    next(error);
-  }
-});
 
 // delete products
 productRouter.delete("/:id", auth, admin, async (req, res, next) => {
@@ -178,5 +163,22 @@ productRouter.get("/top", async (req, res) => {
     throw new Error("products not found");
   }
 });
+
+//get products by id
+productRouter.get("/:id", async (req, res, next) => {
+  try {
+    const product = await ProductModel.findById(req.params.id);
+    if (product) {
+      res.status(200).send(product);
+    } else {
+      res
+        .status(404)
+        .json({ message: `product with id ${req.params.id} not found` });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = productRouter;

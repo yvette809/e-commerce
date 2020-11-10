@@ -1,9 +1,11 @@
 const express = require("express");
 const OrderModel = require("./orderModel");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose")
 const { auth, admin } = require("../../middleware/authMiddleware");
 const generateToken = require("../../../utils/generateToken");
 const orderRouter = express.Router();
+
 
 // create new order
 
@@ -40,20 +42,6 @@ orderRouter.post("/", auth, async (req, res) => {
   }
 });
 
-//get order by id
-orderRouter.get("/:id", auth, async (req, res, next) => {
-  const order = await OrderModel.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
-
-  if (order) {
-    res.json(order);
-  } else {
-    res.status(404);
-    throw new Error("Order not found");
-  }
-});
 
 // update order to pay
 orderRouter.put("/:id/pay", auth, async (req, res, next) => {
@@ -103,11 +91,10 @@ orderRouter.put("/:id/deliver", auth, async (req, res, next) => {
 
 
 // get logged in user order
-
 orderRouter.get("/myorders", auth, async (req, res, next) => {
   try {
-    const orders = await OrderModel.find({ user: req.user._id });
-    console.log(orders)
+    const orders = await OrderModel.find({ user:mongoose.Types.ObjectId(req.user._id)  });
+    console.log('ORDERS: ', orders)
     if (orders) {
       res.status(200).json(orders);
     } else {
@@ -119,6 +106,9 @@ orderRouter.get("/myorders", auth, async (req, res, next) => {
     next(error);
   }
 });
+
+
+
 
 // get all orders
 
@@ -134,5 +124,21 @@ orderRouter.get("/", auth, admin, async (req, res, next) => {
     next(error);
   }
 });
+
+//get order by id
+orderRouter.get("/:id", auth, async (req, res, next) => {
+  const order = await OrderModel.findById(req.params.id).populate(
+    "user",
+    "name email"
+  );
+
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
 
 module.exports = orderRouter;
