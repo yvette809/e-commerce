@@ -39,7 +39,10 @@ server.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
 
-server.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+const publicPath = path.join(__dirname, "./uploads");
+server.use(express.static(publicPath));
+
+// server.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // prepare for deployment
 if(process.env.NODE_ENV=== 'production'){
