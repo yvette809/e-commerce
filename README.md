@@ -4,7 +4,7 @@
 
 
 
-![screenshot](./src/images/prjt2.png)
+![screenshot](./images/prjt2.png)
 
 ## Features
 
