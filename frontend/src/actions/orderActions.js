@@ -39,7 +39,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post(
-      `http://localhost:4060/api/orders`,
+      `https://electroshop1.herokuapp.com/api/orders`,
       order,
       config
     );
@@ -81,7 +81,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`http://localhost:4060/api/orders/${id}`, config)
+    const { data } = await axios.get(`https://electroshop1.herokuapp.com/api/orders/${id}`, config)
 
     dispatch({
       type: ORDER_DETAILS_SUCCESS,
@@ -124,7 +124,7 @@ export const payOrder = (orderId, paymentResult) => async (
     }
 
     const { data } = await axios.put(
-      `http://localhost:4060/api/orders/${orderId}/pay`,
+      `https://electroshop1.herokuapp.com/api/orders/${orderId}/pay`,
       paymentResult,
       config
     )
@@ -167,7 +167,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      `http://localhost:4060/api/orders/${order._id}/deliver`,
+      `https://electroshop1.herokuapp.com/api/orders/${order._id}/deliver`,
       {},
       config
     )
@@ -209,7 +209,7 @@ export const listMyOrders = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`http://localhost:4060/api/orders/myorders`, config)
+    const { data } = await axios.get(`https://electroshop1.herokuapp.com/api/orders/myorders`, config)
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,
@@ -247,7 +247,7 @@ export const listOrders = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`http://localhost:4060/api/orders`, config)
+    const { data } = await axios.get(`https://electroshop1.herokuapp.com/api/orders`, config)
 
     dispatch({
       type: ORDER_LIST_SUCCESS,

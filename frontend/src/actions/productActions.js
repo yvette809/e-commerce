@@ -57,7 +57,7 @@ export const listProductDetails = (id) => async (dispatch) => {
       type: PRODUCT_DETAILS_REQUEST,
     });
 
-    const res = await axios.get(`http://localhost:4060/api/products/${id}`);
+    const res = await axios.get(`https://electroshop1.herokuapp.com/api/products/${id}`);
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -90,7 +90,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`http://localhost:4060/api/products/${id}`, config);
+    await axios.delete(`https://electroshop1.herokuapp.com/api/products/${id}`, config);
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -129,7 +129,7 @@ export const createProduct = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post(
-      `http://localhost:4060/api/products`,
+      `https://electroshop1.herokuapp.com//api/products`,
       {},
       config
     );
@@ -171,7 +171,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `http://localhost:4060/api/products/${product._id}`,
+      `https://electroshop1.herokuapp.com/api/products/${product._id}`,
       product,
       config
     );
@@ -216,7 +216,7 @@ export const createProductReview = (productId, review) => async (
     };
 
     await axios.post(
-      `http://localhost:4060/api/products/${productId}/reviews`,
+      `https://electroshop1.herokuapp.com/api/products/${productId}/reviews`,
       review,
       config
     );
@@ -243,7 +243,7 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:4060/api/products/top`);
+    const { data } = await axios.get(`https://electroshop1.herokuapp.com/api/products/top`);
 
     dispatch({
       type: PRODUCT_TOP_SUCCESS,
